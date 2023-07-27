@@ -1,8 +1,8 @@
 package com.example.MutsaMarket.controller;
 
-import com.example.MutsaMarket.dto.ItemDto;
-import com.example.MutsaMarket.dto.ItemListDto;
-import com.example.MutsaMarket.dto.SalesItemDto;
+import com.example.MutsaMarket.dto.item.ItemDto;
+import com.example.MutsaMarket.dto.item.ItemListDto;
+import com.example.MutsaMarket.dto.item.SalesItemDto;
 import com.example.MutsaMarket.service.SalesItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

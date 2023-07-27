@@ -1,8 +1,8 @@
 package com.example.MutsaMarket.controller;
 
-import com.example.MutsaMarket.dto.CommentDto;
-import com.example.MutsaMarket.dto.CommentListDto;
-import com.example.MutsaMarket.dto.ReplyDto;
+import com.example.MutsaMarket.dto.comment.CommentDto;
+import com.example.MutsaMarket.dto.comment.CommentListDto;
+import com.example.MutsaMarket.dto.comment.ReplyDto;
 import com.example.MutsaMarket.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

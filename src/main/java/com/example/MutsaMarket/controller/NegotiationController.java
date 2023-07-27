@@ -1,8 +1,8 @@
 package com.example.MutsaMarket.controller;
 
-import com.example.MutsaMarket.dto.ProposalDto;
-import com.example.MutsaMarket.dto.ProposalListDto;
-import com.example.MutsaMarket.dto.UpdateProposalDto;
+import com.example.MutsaMarket.dto.negotiation.ProposalDto;
+import com.example.MutsaMarket.dto.negotiation.ProposalListDto;
+import com.example.MutsaMarket.dto.negotiation.UpdateProposalDto;
 import com.example.MutsaMarket.service.NegotiationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

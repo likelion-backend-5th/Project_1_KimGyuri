@@ -1,8 +1,8 @@
 package com.example.MutsaMarket.service;
 
-import com.example.MutsaMarket.dto.CommentDto;
-import com.example.MutsaMarket.dto.CommentListDto;
-import com.example.MutsaMarket.dto.ReplyDto;
+import com.example.MutsaMarket.dto.comment.CommentDto;
+import com.example.MutsaMarket.dto.comment.CommentListDto;
+import com.example.MutsaMarket.dto.comment.ReplyDto;
 import com.example.MutsaMarket.entity.CommentEntity;
 import com.example.MutsaMarket.entity.SalesItemEntity;
 import com.example.MutsaMarket.exceptions.AuthorizationException;
@@ -15,9 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 

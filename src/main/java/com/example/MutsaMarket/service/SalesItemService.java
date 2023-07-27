@@ -1,8 +1,8 @@
 package com.example.MutsaMarket.service;
 
-import com.example.MutsaMarket.dto.ItemDto;
-import com.example.MutsaMarket.dto.ItemListDto;
-import com.example.MutsaMarket.dto.SalesItemDto;
+import com.example.MutsaMarket.dto.item.ItemDto;
+import com.example.MutsaMarket.dto.item.ItemListDto;
+import com.example.MutsaMarket.dto.item.SalesItemDto;
 import com.example.MutsaMarket.entity.SalesItemEntity;
 import com.example.MutsaMarket.exceptions.AuthorizationException;
 import com.example.MutsaMarket.exceptions.ImageUploadException;
@@ -13,10 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;

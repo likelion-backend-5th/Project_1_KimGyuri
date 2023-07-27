@@ -1,4 +1,4 @@
-package com.example.MutsaMarket.dto;
+package com.example.MutsaMarket.dto.comment;
 
 import com.example.MutsaMarket.entity.CommentEntity;
 import lombok.Data;

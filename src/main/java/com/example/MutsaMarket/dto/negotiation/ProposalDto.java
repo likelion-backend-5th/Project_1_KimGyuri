@@ -1,4 +1,4 @@
-package com.example.MutsaMarket.dto;
+package com.example.MutsaMarket.dto.negotiation;
 
 import com.example.MutsaMarket.entity.NegotiationEntity;
 import jakarta.validation.constraints.NotBlank;

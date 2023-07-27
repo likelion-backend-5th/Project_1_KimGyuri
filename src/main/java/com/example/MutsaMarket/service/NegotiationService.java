@@ -1,8 +1,8 @@
 package com.example.MutsaMarket.service;
 
-import com.example.MutsaMarket.dto.ProposalDto;
-import com.example.MutsaMarket.dto.ProposalListDto;
-import com.example.MutsaMarket.dto.UpdateProposalDto;
+import com.example.MutsaMarket.dto.negotiation.ProposalDto;
+import com.example.MutsaMarket.dto.negotiation.ProposalListDto;
+import com.example.MutsaMarket.dto.negotiation.UpdateProposalDto;
 import com.example.MutsaMarket.entity.NegotiationEntity;
 import com.example.MutsaMarket.entity.SalesItemEntity;
 import com.example.MutsaMarket.exceptions.*;
@@ -13,9 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
