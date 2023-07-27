@@ -17,3 +17,6 @@ spring:
   web:
     resources:
       static-locations: file:media/,classpath:/static
+
+jwt:
+  secret: #입력
