@@ -32,6 +32,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/items/**").permitAll()
                                 .requestMatchers("/re-auth", "/users/my-profile").authenticated() //인증
                                 .requestMatchers(HttpMethod.POST, "/items").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/items/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/items/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "items/**").authenticated()
                                 .requestMatchers("/users/login", "/users/signup").anonymous() //비인증
