@@ -1,5 +1,6 @@
 package com.example.MutsaMarket.entity;
 
+import com.example.MutsaMarket.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -31,4 +32,9 @@ public class SalesItemEntity {
 
     @OneToMany(mappedBy = "salesItem")
     private List<NegotiationEntity> negotiation;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
 }
