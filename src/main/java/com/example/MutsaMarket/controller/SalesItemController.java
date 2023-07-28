@@ -62,8 +62,8 @@ public class SalesItemController {
 
     //물품 이미지 등록
     @PutMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Map<String, String>> updateImage(@PathVariable("id") Long id, @RequestParam("image") MultipartFile image, @RequestParam("writer") String writer, @RequestParam("password") String password) {
-        service.updateImage(id, image, writer, password);
+    public ResponseEntity<Map<String, String>> updateImage(@PathVariable("id") Long id, @RequestParam("image") MultipartFile image) {
+        service.updateImage(id, image);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", "이미지가 등록되었습니다.");
 
@@ -72,8 +72,8 @@ public class SalesItemController {
 
     //물품 정보 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable("id") Long id, @RequestBody SalesItemDto dto) {
-        service.deleteItem(id, dto);
+    public ResponseEntity<Map<String, String>> delete(@PathVariable("id") Long id) {
+        service.deleteItem(id);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", "물품을 삭제했습니다.");
 
