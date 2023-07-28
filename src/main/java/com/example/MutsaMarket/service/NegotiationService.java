@@ -39,7 +39,7 @@ public class NegotiationService {
         newProposal.setWriter(dto.getWriter());
         newProposal.setPassword(dto.getPassword());
         newProposal.setSuggestedPrice(dto.getSuggestedPrice());
-        newProposal.setItemId(itemId);
+        newProposal.setSalesItem(optionalSalesItem.get());
         newProposal.setStatus("제안");
         newProposal = negotiationRepository.save(newProposal);
         return ProposalDto.fromEntity(newProposal);
@@ -48,7 +48,7 @@ public class NegotiationService {
     //구매 제안 조회
     public Page<ProposalListDto> readProposalAll(Long itemId, String writer, String password, Integer page) {
         Optional<SalesItemEntity> optionalSalesItem = salesItemRepository.findById(itemId);
-        List<NegotiationEntity> optionalNegotiation = negotiationRepository.findByItemId(itemId);
+        List<NegotiationEntity> optionalNegotiation = negotiationRepository.findBySalesItem_Id(itemId);;
 
         //대상 물품이 없을 때
         if (optionalSalesItem.isEmpty())
@@ -62,14 +62,14 @@ public class NegotiationService {
         SalesItemEntity item = optionalSalesItem.get();
         if(item.getWriter().equals(writer) && item.getPassword().equals(password)) {
             Pageable pageable = PageRequest.of(page, 25, Sort.by("id"));
-            Page<NegotiationEntity> proposalEntityPage = negotiationRepository.findAllByItemId(itemId, pageable);
+            Page<NegotiationEntity> proposalEntityPage = negotiationRepository.findAllBySalesItem_Id(itemId, pageable);
             return proposalEntityPage.map(ProposalListDto::fromEntity);
         }
 
         //구매 제안자의 경우
         else if(!optionalNegotiation.isEmpty()) {
             Pageable pageable = PageRequest.of(page, 25, Sort.by("id"));
-            Page<NegotiationEntity> proposalEntityPage = negotiationRepository.findAllByItemIdAndWriterAndPassword(itemId, writer, password, pageable);
+            Page<NegotiationEntity> proposalEntityPage = negotiationRepository.findAllBySalesItem_IdAndWriterAndPassword(itemId, writer, password, pageable);
             return proposalEntityPage.map(ProposalListDto::fromEntity);
         }
         else {
@@ -91,7 +91,7 @@ public class NegotiationService {
         SalesItemEntity item = optionalSalesItem.get();
 
         //구매 제안자 (제안 수정 / 제안 확정)
-        if(proposal.getItemId().equals(itemId) && proposal.getWriter().equals(dto.getWriter()) && proposal.getPassword().equals(dto.getPassword())) {
+        if(proposal.getSalesItem().getId().equals(itemId) && proposal.getWriter().equals(dto.getWriter()) && proposal.getPassword().equals(dto.getPassword())) {
 
             if(proposal.getStatus().equals("수락")) {
                 proposal.setStatus(dto.getStatus());
@@ -100,7 +100,7 @@ public class NegotiationService {
                 item.setStatus("판매 완료");
                 salesItemRepository.save(item); //해당 물품 판매 완료
 
-                List<NegotiationEntity> proposals = negotiationRepository.findAllByItemId(itemId);
+                List<NegotiationEntity> proposals = negotiationRepository.findAllBySalesItem_Id(itemId);
                 for (NegotiationEntity negotiation : proposals) {
                     if (!negotiation.getStatus().equals("확정")) {
                         negotiation.setStatus("거절");
@@ -118,7 +118,7 @@ public class NegotiationService {
         }
 
         //물품 등록자 (제안 수락/거절)
-        else if(proposal.getItemId().equals(itemId) && item.getWriter().equals(dto.getWriter()) && item.getPassword().equals(dto.getPassword())) {
+        else if(proposal.getSalesItem().getId().equals(itemId) && item.getWriter().equals(dto.getWriter()) && item.getPassword().equals(dto.getPassword())) {
             if(proposal.getStatus().equals("제안")) {
                 proposal.setStatus(dto.getStatus());
                 negotiationRepository.save(proposal);
@@ -140,7 +140,7 @@ public class NegotiationService {
             throw new NegotiationNotFoundException();
 
         NegotiationEntity proposal = optionalProposal.get();
-        if(proposal.getItemId().equals(itemId) || proposal.getId().equals(proposalId))
+        if(proposal.getSalesItem().getId().equals(itemId) || proposal.getId().equals(proposalId))
             throw new ItemNotFoundException();
 
         if(proposal.getWriter().equals(dto.getWriter()) && proposal.getPassword().equals(dto.getPassword()))

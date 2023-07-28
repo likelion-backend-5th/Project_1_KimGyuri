@@ -28,4 +28,7 @@ public class SalesItemEntity {
 
     @OneToMany(mappedBy = "salesItem")
     private List<CommentEntity> comment;
+
+    @OneToMany(mappedBy = "salesItem")
+    private List<NegotiationEntity> negotiation;
 }

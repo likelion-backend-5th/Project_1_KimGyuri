@@ -11,8 +11,9 @@ public class NegotiationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="item_id")
-    private Long itemId;
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private SalesItemEntity salesItem;
 
     @Column(name="suggested_price")
     private Long suggestedPrice;
