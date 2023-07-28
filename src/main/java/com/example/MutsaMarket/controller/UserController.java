@@ -45,4 +45,19 @@ public class UserController {
         log.warn("비밀번호가 일치하지 않습니다.");
         return "redirect:/users/signup?error";
     }
+
+    //로그인 UI
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login-form";
+    }
+
+    // 로그인 성공 후 로그인 여부를 판단하기 위한 GetMapping
+    @GetMapping("/my-profile")
+    public String myProfile(Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        log.info(userDetails.getUsername());
+        log.info(userDetails.getEmail());
+        return "my-profile";
+    }
 }
