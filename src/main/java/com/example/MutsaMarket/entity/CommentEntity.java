@@ -1,5 +1,6 @@
 package com.example.MutsaMarket.entity;
 
+import com.example.MutsaMarket.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,4 +20,8 @@ public class CommentEntity {
     private String password;
     private String content;
     private String reply;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }
