@@ -1,5 +1,6 @@
 package com.example.MutsaMarket.entity;
 
+import com.example.MutsaMarket.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,4 +22,8 @@ public class NegotiationEntity {
     private String status;
     private String writer;
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }

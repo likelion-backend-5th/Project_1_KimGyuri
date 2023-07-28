@@ -1,6 +1,7 @@
 package com.example.MutsaMarket.entity.user;
 
 import com.example.MutsaMarket.entity.CommentEntity;
+import com.example.MutsaMarket.entity.NegotiationEntity;
 import com.example.MutsaMarket.entity.SalesItemEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -28,4 +29,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     private List<CommentEntity> comment;
+
+    @OneToMany(mappedBy = "user")
+    private List<NegotiationEntity> negotiation;
 }
