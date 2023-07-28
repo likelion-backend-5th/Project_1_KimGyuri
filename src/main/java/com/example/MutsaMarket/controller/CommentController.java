@@ -54,9 +54,8 @@ public class CommentController {
 
     //게시글 댓글 삭제
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable("commentId") Long commentId, @PathVariable("itemId") Long itemId, @RequestBody CommentDto dto) {
-        log.info(dto.toString());
-        service.deleteComment(commentId, itemId, dto);
+    public ResponseEntity<Map<String, String>> delete(@PathVariable("commentId") Long commentId, @PathVariable("itemId") Long itemId) {
+        service.deleteComment(commentId, itemId);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", "댓글을 삭제했습니다.");
 
