@@ -3,6 +3,7 @@ package com.example.MutsaMarket.config;
 import com.example.MutsaMarket.jwt.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,8 +27,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authHttp -> authHttp
-                                .requestMatchers("/token/issue").permitAll() //누구나
-                                .requestMatchers("/users/my-profile").authenticated() //인증
+                                .requestMatchers("/no-auth", "/token/issue").permitAll() //누구나
+                                .requestMatchers(HttpMethod.GET, "/items").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/items/**").permitAll()
+                                .requestMatchers("/re-auth", "/users/my-profile").authenticated() //인증
+                                .requestMatchers(HttpMethod.POST, "/items").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/items/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "items/**").authenticated()
                                 .requestMatchers("/users/login", "/users/signup").anonymous() //비인증
                 )
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
