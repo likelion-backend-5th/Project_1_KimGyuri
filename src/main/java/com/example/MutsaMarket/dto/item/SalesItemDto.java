@@ -15,10 +15,10 @@ public class SalesItemDto {
     @NotNull(message = "가격을 입력해주세요.")
     private Long minPriceWanted;
 
-    @NotBlank(message = "작성자를 입력해주세요.")
+    //@NotBlank(message = "작성자를 입력해주세요.")
     private String writer;
 
-    @NotBlank(message = "비밀번호를 입력해주세요.")
+    //@NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
 
     public static SalesItemDto fromEntity(SalesItemEntity entity) {

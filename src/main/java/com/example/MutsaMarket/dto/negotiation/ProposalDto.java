@@ -7,10 +7,10 @@ import lombok.Data;
 
 @Data
 public class ProposalDto {
-    @NotBlank(message = "작성자를 입력해주세요.")
+    //@NotBlank(message = "작성자를 입력해주세요.")
     private String writer;
 
-    @NotBlank(message = "비밀번호를 입력해주세요.")
+    //@NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
 
     @NotNull(message = "제안 가격을 입력해주세요.")
