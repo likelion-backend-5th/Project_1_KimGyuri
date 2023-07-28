@@ -11,8 +11,9 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="item_id")
-    private Long itemId;
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private SalesItemEntity salesItem;
 
     private String writer;
     private String password;

@@ -27,14 +27,15 @@ public class CommentService {
 
     //댓글 작성
     public CommentDto createComment(Long itemId, CommentDto dto) {
-        if (!salesItemRepository.existsById(itemId))
+        Optional<SalesItemEntity> optionalSalesItem = salesItemRepository.findById(itemId);
+        if (optionalSalesItem.isEmpty())
             throw new ItemNotFoundException();
 
         CommentEntity newComment = new CommentEntity();
         newComment.setWriter(dto.getWriter());
         newComment.setPassword(dto.getPassword());
         newComment.setContent(dto.getContent());
-        newComment.setItemId(itemId);
+        newComment.setSalesItem(optionalSalesItem.get());
         newComment = commentRepository.save(newComment);
         return CommentDto.fromEntity(newComment);
     }
@@ -57,7 +58,7 @@ public class CommentService {
             throw new CommentNotFoundException();
 
         CommentEntity comment = optionalComment.get();
-        if (!itemId.equals(comment.getItemId()))
+        if (!itemId.equals(comment.getSalesItem().getId()))
             throw new ItemNotFoundException();
         if (comment.getWriter().equals(dto.getWriter()) && comment.getPassword().equals(dto.getPassword())) {
             comment.setContent(dto.getContent());
@@ -75,7 +76,7 @@ public class CommentService {
             throw new CommentNotFoundException();
 
         CommentEntity comment = optionalComment.get();
-        if(!itemId.equals(comment.getItemId()))
+        if(!itemId.equals(comment.getSalesItem().getId()))
             throw new ItemNotFoundException();
 
         if(comment.getWriter().equals(dto.getWriter()) && comment.getPassword().equals(dto.getPassword()))
@@ -93,7 +94,7 @@ public class CommentService {
 
         SalesItemEntity item = optionalSalesItem.get();
         CommentEntity comment = optionalComment.get();
-        if (!itemId.equals(comment.getItemId()))
+        if (!itemId.equals(comment.getSalesItem().getId()))
             throw new ItemNotFoundException();
         if (item.getWriter().equals(dto.getWriter()) && item.getPassword().equals(dto.getPassword())) {
             comment.setReply(dto.getReply());
