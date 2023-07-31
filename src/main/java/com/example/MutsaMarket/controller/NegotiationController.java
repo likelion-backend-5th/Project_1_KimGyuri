@@ -37,8 +37,8 @@ public class NegotiationController {
 
     //구매 제안 조회
     @GetMapping
-    public Page<ProposalListDto> readAll(@PathVariable("itemId") Long itemId, @RequestParam("writer") String writer, @RequestParam("password") String password, @RequestParam(value = "page", defaultValue = "0") Integer page) {
-        return service.readProposalAll(itemId, writer, password, page);
+    public Page<ProposalListDto> readAll(@PathVariable("itemId") Long itemId, @RequestParam(value = "page", defaultValue = "0") Integer page) {
+        return service.readProposalAll(itemId, page);
     }
 
     //구매 제안 수정
@@ -60,15 +60,13 @@ public class NegotiationController {
 
     //구매 제안 삭제
     @DeleteMapping("{proposalId}")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable("itemId") Long itemId, @PathVariable("proposalId") Long proposalId, @RequestBody UpdateProposalDto dto) {
-        log.info(dto.toString());
-        service.deleteProposal(itemId, proposalId, dto);
+    public ResponseEntity<Map<String, String>> delete(@PathVariable("itemId") Long itemId, @PathVariable("proposalId") Long proposalId) {
+        service.deleteProposal(itemId, proposalId);
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", "제안을 삭제했습니다.");
 
         return ResponseEntity.ok(responseBody);
     }
-
     //유효성 검증 결과 오류
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

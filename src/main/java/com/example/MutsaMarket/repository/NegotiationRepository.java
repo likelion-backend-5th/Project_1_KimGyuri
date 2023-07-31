@@ -12,4 +12,5 @@ public interface NegotiationRepository extends JpaRepository<NegotiationEntity, 
     Page<NegotiationEntity> findAllBySalesItem_IdAndWriterAndPassword(Long itemId, String writer, String password, Pageable pageable);
     Page<NegotiationEntity> findAllBySalesItem_Id(Long itemId, Pageable pageable);
     List<NegotiationEntity> findAllBySalesItem_Id(Long itemId);
+    Page<NegotiationEntity> findAllBySalesItem_IdAndUser_Id(Long itemId, Long userId, Pageable pageable);
 }
