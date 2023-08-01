@@ -45,7 +45,7 @@ public class NegotiationService {
                 if (optionalUser.isPresent()) {
                     return optionalUser.get();
                 } else {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //사용자를 찾지 못했습니다
+                    throw new UserNotFoundException();
                 }
             } else {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //유효하지 않은 토큰입니다

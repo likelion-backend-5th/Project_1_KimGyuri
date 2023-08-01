@@ -9,6 +9,7 @@ import com.example.MutsaMarket.entity.user.UserEntity;
 import com.example.MutsaMarket.exceptions.AuthorizationException;
 import com.example.MutsaMarket.exceptions.CommentNotFoundException;
 import com.example.MutsaMarket.exceptions.ItemNotFoundException;
+import com.example.MutsaMarket.exceptions.UserNotFoundException;
 import com.example.MutsaMarket.jwt.JwtTokenUtils;
 import com.example.MutsaMarket.repository.CommentRepository;
 import com.example.MutsaMarket.repository.SalesItemRepository;
@@ -46,7 +47,7 @@ public class CommentService {
                 if (optionalUser.isPresent()) {
                     return optionalUser.get();
                 } else {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //사용자를 찾지 못했습니다
+                    throw new UserNotFoundException();
                 }
             } else {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //유효하지 않은 토큰입니다
