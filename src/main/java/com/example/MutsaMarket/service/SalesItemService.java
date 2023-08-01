@@ -36,32 +36,38 @@ public class SalesItemService {
     private final JwtTokenUtils jwtTokenUtils;
     private final UserRepository userRepository;
 
-    //물품 등록
-    public SalesItemDto createItem(SalesItemDto dto) {
+    //인증된 사용자 정보 추출
+    private UserEntity getUserFromToken() {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.split(" ")[1];
             if (jwtTokenUtils.validate(token)) {
                 String username = jwtTokenUtils.parseClaims(token).getSubject();
                 Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
-                if (optionalUser.isEmpty()) {
+                if (optionalUser.isPresent()) {
+                    return optionalUser.get();
+                } else {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //사용자를 찾지 못했습니다
                 }
-                UserEntity user = optionalUser.get();
-
-                SalesItemEntity newItem = new SalesItemEntity();
-                newItem.setTitle(dto.getTitle());
-                newItem.setDescription(dto.getDescription());
-                newItem.setMinPriceWanted(dto.getMinPriceWanted());
-                newItem.setStatus("판매중");
-                newItem.setUser(user);
-                return SalesItemDto.fromEntity(this.repository.save(newItem));
             } else {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //유효하지 않은 토큰입니다
             }
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //토큰의 형식이 잘못되었습니다
         }
+    }
+
+    //물품 등록
+    public SalesItemDto createItem(SalesItemDto dto) {
+        UserEntity user = getUserFromToken();
+
+        SalesItemEntity newItem = new SalesItemEntity();
+        newItem.setTitle(dto.getTitle());
+        newItem.setDescription(dto.getDescription());
+        newItem.setMinPriceWanted(dto.getMinPriceWanted());
+        newItem.setStatus("판매중");
+        newItem.setUser(user);
+        return SalesItemDto.fromEntity(this.repository.save(newItem));
     }
 
     //물품 전체 조회
@@ -83,110 +89,71 @@ public class SalesItemService {
 
     //물품 정보 수정
     public SalesItemDto updateItem(Long id, SalesItemDto dto) {
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.split(" ")[1];
-            if (jwtTokenUtils.validate(token)) {
-                String username = jwtTokenUtils.parseClaims(token).getSubject();
-                Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
-                if (optionalUser.isEmpty()) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //사용자를 찾지 못했습니다
-                }
-                UserEntity user = optionalUser.get();
+        UserEntity user = getUserFromToken();
 
-                Optional<SalesItemEntity> optionalItem = repository.findById(id);
-                if (optionalItem.isPresent()) {
-                    SalesItemEntity item = optionalItem.get();
-                    if (item.getUser().getId().equals(user.getId())) {
-                        item.setTitle(dto.getTitle());
-                        item.setDescription(dto.getDescription());
-                        item.setMinPriceWanted(dto.getMinPriceWanted());
-                        repository.save(item);
-                        return SalesItemDto.fromEntity(item);
-                    } else
-                        throw new AuthorizationException();
-                } else
-                    throw new ItemNotFoundException();
+        Optional<SalesItemEntity> optionalItem = repository.findById(id);
+        if (optionalItem.isPresent()) {
+            SalesItemEntity item = optionalItem.get();
+            if (item.getUser().getId().equals(user.getId())) {
+                item.setTitle(dto.getTitle());
+                item.setDescription(dto.getDescription());
+                item.setMinPriceWanted(dto.getMinPriceWanted());
+                repository.save(item);
+                return SalesItemDto.fromEntity(item);
             } else
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //유효하지 않은 토큰입니다
+                throw new AuthorizationException();
         } else
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //토큰의 형식이 잘못되었습니다
+            throw new ItemNotFoundException();
     }
 
     //물품 이미지 등록
     public ItemListDto updateImage(Long id, MultipartFile image) {
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.split(" ")[1];
-            if (jwtTokenUtils.validate(token)) {
-                String username = jwtTokenUtils.parseClaims(token).getSubject();
-                Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
-                if (optionalUser.isEmpty()) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //사용자를 찾지 못했습니다
-                }
-                UserEntity user = optionalUser.get();
+        UserEntity user = getUserFromToken();
 
-                Optional<SalesItemEntity> optionalSalesItem = repository.findById(id);
-                if (optionalSalesItem.isEmpty())
-                    throw new ItemNotFoundException();
+        Optional<SalesItemEntity> optionalSalesItem = repository.findById(id);
+        if (optionalSalesItem.isEmpty())
+            throw new ItemNotFoundException();
 
-                SalesItemEntity item = optionalSalesItem.get();
-                if (item.getUser().getId().equals(user.getId())) {
-                    String profileDir = String.format("media/%d/", id);
-                    try {
-                        Files.createDirectories(Path.of(profileDir));
-                    } catch (IOException e) {
-                        throw new ImageUploadException();
-                    }
+        SalesItemEntity item = optionalSalesItem.get();
+        if (item.getUser().getId().equals(user.getId())) {
+            String profileDir = String.format("media/%d/", id);
+            try {
+                Files.createDirectories(Path.of(profileDir));
+            } catch (IOException e) {
+                throw new ImageUploadException();
+            }
 
-                    String originalFilename = image.getOriginalFilename();
-                    String[] fileNameSplit = originalFilename.split("\\."); //정규표현식을 기준으로 split
-                    String extension = fileNameSplit[fileNameSplit.length - 1]; //split 제일 마지막이 확장자
-                    String profileFilename = "image." + extension;
+            String originalFilename = image.getOriginalFilename();
+            String[] fileNameSplit = originalFilename.split("\\."); //정규표현식을 기준으로 split
+            String extension = fileNameSplit[fileNameSplit.length - 1]; //split 제일 마지막이 확장자
+            String profileFilename = "image." + extension;
 
-                    String profilePath = profileDir + profileFilename;
+            String profilePath = profileDir + profileFilename;
 
-                    try {
-                        image.transferTo(Path.of(profilePath));
-                    } catch (IOException e) {
-                        throw new ImageUploadException();
-                    }
-                    SalesItemEntity salesItem = optionalSalesItem.get();
-                    salesItem.setImageUrl(String.format("/static/%d/%s", id, profileFilename));
-                    return ItemListDto.fromEntity(repository.save(salesItem));
-                } else
-                    throw new AuthorizationException();
-            } else
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //유효하지 않은 토큰입니다
+            try {
+                image.transferTo(Path.of(profilePath));
+            } catch (IOException e) {
+                throw new ImageUploadException();
+            }
+            SalesItemEntity salesItem = optionalSalesItem.get();
+            salesItem.setImageUrl(String.format("/static/%d/%s", id, profileFilename));
+            return ItemListDto.fromEntity(repository.save(salesItem));
         } else
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //토큰의 형식이 잘못되었습니다
+            throw new AuthorizationException();
     }
 
     //물품 정보 삭제
     public void deleteItem(Long id) {
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.split(" ")[1];
-            if (jwtTokenUtils.validate(token)) {
-                String username = jwtTokenUtils.parseClaims(token).getSubject();
-                Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
-                if (optionalUser.isEmpty()) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST); //사용자를 찾지 못했습니다
-                }
-                UserEntity user = optionalUser.get();
+        UserEntity user = getUserFromToken();
 
-                Optional<SalesItemEntity> optionalSalesItem = repository.findById(id);
-                if (optionalSalesItem.isEmpty())
-                    throw new ItemNotFoundException();
+        Optional<SalesItemEntity> optionalSalesItem = repository.findById(id);
+        if (optionalSalesItem.isEmpty())
+            throw new ItemNotFoundException();
 
-                SalesItemEntity item = optionalSalesItem.get();
-                if (item.getUser().getId().equals(user.getId())) {
-                    repository.deleteById(id);
-                } else
-                    throw new AuthorizationException();
-            } else
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //유효하지 않은 토큰입니다
+        SalesItemEntity item = optionalSalesItem.get();
+        if (item.getUser().getId().equals(user.getId())) {
+            repository.deleteById(id);
         } else
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED); //토큰의 형식이 잘못되었습니다
+            throw new AuthorizationException();
     }
 }
