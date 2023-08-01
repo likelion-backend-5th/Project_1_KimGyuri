@@ -206,9 +206,14 @@
 
 ### 23.07.31
 > - Jwt Token 인증 방식으로 Negotiation 관련 기능 변경 : 구매 제안 등록, 수정, 삭제, 수락/거절, 확정 메소드 수정. 기존의 writer, password 데이터 활용 X
+
+### 23.08.01
+> - 리팩토링 : SalesItemService, CommentService, NegotiationService의 사용자 추출 부분 코드 중복 -> 메소드로 추출
+> - 사용자 정보 추출 부분 예외 처리 구현
 </details>
 <br>
 
 
 
-## 💻 Postman Collection
+## 💻 API 문서
+https://documenter.getpostman.com/view/28055519/2s9XxvSEFU
