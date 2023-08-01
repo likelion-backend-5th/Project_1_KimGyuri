@@ -5,8 +5,12 @@
 최종적으로 구매 제안에 대하여 수락할 수 있는 형태의 중고 거래 플랫폼의 백엔드를 만드는 것이 목표입니다.**
 <br>
 
-## 💡 프로젝트 요구사항 💡
-### ❤ 중고 물품 관리
+## 📑 프로젝트 요구사항
+
+<details>
+<summary>요구사항</summary>
+
+### 🛒 중고 물품 관리
 ```
 1. 누구든지 중고 거래를 목적으로 물품에 대한 정보를 등록할 수 있다. 
     1. 이때 반드시 포함되어야 하는 내용은 제목, 설명, 최소 가격, 작성자이다.
@@ -23,7 +27,8 @@
 5. 등록된 물품 정보는 삭제가 가능하다. 
     1. 이때, 물품이 등록될 때 추가한 비밀번호를 첨부해야 한다.
 ```
-### 💛 중고 물품 댓글
+
+### 🛒 중고 물품 댓글
 ```
 1. 등록된 물품에 대한 질문을 위하여 댓글을 등록할 수 있다. 
     1. 이때 반드시 포함되어야 하는 내용은 대상 물품, 댓글 내용, 작성자이다.
@@ -38,7 +43,8 @@
     1. 만약 댓글이 등록된 대상 물품을 등록한 사람일 경우, 물품을 등록할 때 사용한 비밀번호를 첨부할 경우 답글 항목을 수정할 수 있다.
     2. 답글은 댓글에 포함된 공개 정보이다.
 ```
-### 💚 구매 제안
+
+### 🛒 구매 제안
 ```
 1. 등록된 물품에 대하여 구매 제안을 등록할 수 있다. 
     1. 이때 반드시 포함되어야 하는 내용은 대상 물품, 제안 가격, 작성자이다.
@@ -63,40 +69,97 @@
     3. 구매 제안이 확정될 경우, 대상 물품의 상태는 판매 완료가 된다.
     4. 구매 제안이 확정될 경우, 확정되지 않은 다른 구매 제안의 상태는 모두 거절이 된다.
 ```
+
+### 🛒 인증 생성
+```
+1. 사용자는 회원가입을 진행할 수 있다.
+    - 회원가입에 필요한 정보는 아이디와 비밀번호가 필수이다.
+    - 부수적으로 전화번호, 이메일, 주소 정보를 기입할 수 있다.
+    - 이에 필요한 사용자 Entity는 직접 작성하도록 한다.
+    
+2. **아이디 비밀번호를 통해 로그인을 할 수 있어야 한다.
+    
+    
+3. 아이디 비밀번호를 통해 로그인에 성공하면, JWT가 발급된다. 이 JWT를 소유하고 있을 경우 인증이 필요한 서비스에 접근이 가능해 진다.
+    - 인증이 필요한 서비스는 추후(미션 후반부) 정의한다.
+    
+4. JWT를 받은 서비스는 사용자가 누구인지 사용자 Entity를 기준으로 정확하게 판단할 수 있어야 한다.
+```
+
+### 🛒 관계 설정
+```
+1. 아이디와 비밀번호를 필요로 했던 테이블들은 실제 사용자 Record에 대응되도록 ERD를 수정하자.
+    - ERD 수정과 함께 해당 정보를 적당히 표현할 수 있도록 Entity를 재작성하자.
+    - 그리고 ORM의 기능을 충실히 사용할 수 있도록 어노테이션을 활용한다.
+    
+2. 다른 작성한 Entity도 변경을 진행한다.
+    - 서로 참조하고 있는 테이블 관계가 있다면, 해당 사항이 표현될 수 있도록 Entity를 재작성한다.
+```
+
+### 🛒 기능 접근 설정
+```
+1. 본래 “누구든지 열람할 수 있다”의 기능 목록은 사용자가 인증하지 않은 상태에서 사용할 수 있도록 한다.
+    - 등록된 물품 정보는 누구든지 열람할 수 있다.
+    - 등록된 댓글은 누구든지 열람할 수 있다.
+    - 기타 기능들
+    
+2. 작성자와 비밀번호를 포함하는 데이터는 인증된 사용자만 사용할 수 있도록 한다.
+    - 이때 해당하는 기능에 포함되는 아이디 비밀번호 정보는, 1일차에 새로 작성한 사용자 Entity와의 관계로 대체한다.
+        - 물품 정보 등록 → 물품 정보와 사용자 관계 설정
+        - 댓글 등록 → 댓글과 사용자 관계 설정
+        - 기타 등등
+    - 누구든지 중고 거래를 목적으로 물품에 대한 정보를 등록할 수 있다.
+    - 등록된 물품에 대한 질문을 위하여 댓글을 등록할 수 있다.
+    - 등록된 물품에 대하여 구매 제안을 등록할 수 있다.
+    - 기타 기능들
+```
+</details>
 <br>
 
-## 💻 프로젝트 진행 상황
-### ❤ 중고 물품 관리
-> **23.06.29**  
-> - 기본 CRUD(물품 등록, 물품 조회(전체/단일), 물품 정보 수정, 물품 정보 삭제) + 물품 이미지 등록 구현
-> - 물품 등록 : 반드시 포함되어야 하는 정보에 대해 Jakarta Bean Validation API를 사용하여 비어있지 않도록 사용자의 입력 유효성 검증
+## 📆 프로젝트 진행 상황
+<details>
+<summary>🛒 중고 물품 관리</summary>
+
+### 23.06.29
+> - 기본 CRUD(물품 등록, 물품 조회(전체/단일), 물품 정보 수정, 물품 정보 삭제) + 물품 이미지 등록 구현   
+> - 물품 등록 : 반드시 포함되어야 하는 정보에 대해 Jakarta Bean Validation API를 사용하여 비어있지 않도록 사용자의 입력 유효성 검증   
 > - 물품 이미지 등록 : 이미지 파일명 설정 및 id별 이미지 관리 폴더 추가
 
-> **23.07.03**  
+### 23.07.03
 > - 물품 등록 : 유효성 검증 오류 메시지 기본값 변경
 > - 물품 정보 수정 시 수정 항목 변경 : writer, password는 수정 X
 > - 물품 정보 수정, 삭제, 이미지 등록 : 유효성 검증 조건 변경 (password 검증 -> writer + password 검증)
 
-> **23.07.04**  
+### 23.07.04 
 > - ResponseBody에 원하는 메시지만 반환되게끔 RuntimeException클래스를 상속받아 각각의 클래스를 구현하는 방법으로 예외 처리 구현
-<br>
 
-### 💛 중고 물품 댓글
-> **23.07.03**
+### 23.07.28
+> - 물품 단일 조회 : 물품 등록 사용자 아이디 정보 추가
+</details>
+
+<details>
+<summary>🛒 중고 물품 댓글</summary>
+
+### 23.07.03
 > - 게시글의 댓글에 대한 기본 CRUD(댓글 등록, 댓글 조회, 댓글 수정, 댓글 삭제) 구현
 > - 게시글 작성자의 댓글에 대한 답글 등록(수정) 구현
 > - 댓글 등록 : 반드시 포함되어야 하는 정보에 대해 Jakarta Bean Validation API를 사용하여 비어있지 않도록 사용자의 입력 유효성 검증
 
-> **23.07.04**  
+### 23.07.04
 > - ResponseBody에 원하는 메시지만 반환되게끔 RuntimeException클래스를 상속받아 각각의 클래스를 구현하는 방법으로 예외 처리 구현
-<br>
 
-### 💚 구매 제안
-> **23.07.03**
+### 23.07.28
+> - 댓글 조회 : 댓글 등록 사용자 아이디 정보 추가
+</details>
+
+<details>
+<summary>🛒 구매 제안</summary>
+
+### 23.07.03
 > - 구매 제안 등록 기능 구현
 > - 구매 제안 등록 : 반드시 포함되어야 하는 정보에 대해 Jakarta Bean Validation API를 사용하여 비어있지 않도록 사용자의 입력 유효성 검증
 
-> **23.07.04**
+### 23.07.04
 > - 구매 제안에 대한 RUD(제안 조회, 제안 수정, 제안 삭제) 구현
 > - 구매 제안 조회 : 판매자(물품 등록자)의 경우, DTO의 writer, password 비교 후 repository에서 비교할 건 없기 때문에 Page<> findAllByItemId() 메소드를 만들어서 조회
 > - 구매 제안 조회 : 구매자(구매 제안자)의 경우, DTO의 writer, password를 비교하고 repository에서도 itemId, writer, password가 일치하는 레코드만 조회해야 하기 때문에 Page<> findAllByItemIdAndWriterAndPassword() 메소드를 만들어서 조회
@@ -106,431 +169,46 @@
 > - 구매 제안 확정 : List<> findAllByItemId() 메소드를 만들어서 해당 itemId의 status가 "확정"이 아닌 레코드의 status를 모두 "거절"로 변경
 > - 구매 제안 수락/거절 : DTO의 status를 그대로 받아 status에 저장
 > - ResponseBody에 원하는 메시지만 반환되게끔 RuntimeException클래스를 상속받아 각각의 클래스를 구현하는 방법으로 예외 처리 구현
+
+### 23.07.31
+> - 구매 제안 조회 : 구매 제안 등록 사용자 아이디 정보 추가
+</details>
+
+<details>
+<summary>🛒 인증 생성</summary>
+
+### 23.07.27
+> - 회원 가입 기능 구현 : 아이디와 비밀번호는 필수 입력 항목, 그 외 선택
+> - 회원 가입 기능 구현 : 비밀번호 확인 일치 시 로그인 페이지로 이동 일치 하지 않으면 에러
+> - JWT Token 발급 기능 구현 : JwtTokenUtils - Jwt Token 생성, 유효성 판단, 비밀키 생성, 번역기 생성. TokenController - Token 발급
+> - JWT Token 기반 사용자 인증 처리 구현 - JwtTokenFilter - 헤더 Bearer로 시작하는지 확인 & 사용자 인증 정보 생성 및 SecurityContext에 사용자 정보 설정 후 SecurityContextHolder에 SecurityContext 설정
+</details>
+
+<details>
+<summary>🛒 관계 설정</summary>
+
+### 23.07.28
+> - SalesItem : Comment = 1 : N 관계 설정
+> - SalesItem : Negotiation = 1 : N 관계 설정
+> - User : SalesItem = 1 : N 관계 설정
+> - User : Comment = 1 : N 관계 설정
+> - User : Negotiation = 1 : N 관계 설정
+</details>
+
+<details>
+<summary>🛒 기능 접근 설정</summary>
+
+### 23.07.28
+> - JWT Token 인증 방식으로 SalesItem 관련 기능 변경 : 물품 등록, 수정, 삭제, 이미지 등록 메소드 수정. 기존의 writer, password 데이터 활용 X
+> - SalesItem 관련 Endpoint 요청 권한 설정
+> - Jwt Token 인증 방식으로 Comment 관련 기능 변경 : 댓글 등록, 수정, 삭제, 답글 작성 메소드 수정. 기존의 writer, password 데이터 활용 X
+> - Comment 관련 Endpoint 요청 권한 설정
+
+### 23.07.31
+> - Jwt Token 인증 방식으로 Negotiation 관련 기능 변경 : 구매 제안 등록, 수정, 삭제, 수락/거절, 확정 메소드 수정. 기존의 writer, password 데이터 활용 X
+</details>
 <br>
 
-### 😁 프로젝트 완성 23.07.04
-<br>
 
-## ✅ ♻️멋사마켓♻️ 동작 예시
-### ❤ 중고 물품 관리
-- #### 물품 등록 (POST /items)
-Request
- ```json
- {
-    "title": "중고 맥북 팝니다",
-    "description": "2019년 맥북 프로 13인치 모델입니다",
-    "minPriceWanted": 1000000,
-    "writer": "jeeho.dev",
-    "password": "1qaz2wsx"
-}
- ```    
-Response
-```json
-{
-    "message": "등록이 완료되었습니다."
-}
-```
-- #### 물품 조회 (전체) (GET /items?page={page}&limit={limit})
-Query Params   
-page = 0   
-limit = 20   
-<br>
-Response
-```json
-{
-    "content": [
-        {
-            "id": 1,
-            "title": "중고 맥북 팝니다",
-            "description": "2019년 맥북 프로 13인치 모델입니다",
-            "minPriceWanted": 1000000,
-            "imageUrl": null,
-            "status": "판매중"
-        },
-        {
-            "id": 2,
-            "title": "중고 맥북 팝니다2",
-            "description": "2019년 맥북 프로 13인치 모델입니다",
-            "minPriceWanted": 1000000,
-            "imageUrl": null,
-            "status": "판매중"
-        },
-        {
-            "id": 3,
-            "title": "중고 맥북 팝니다3",
-            "description": "2019년 맥북 프로 13인치 모델입니다",
-            "minPriceWanted": 1000000,
-            "imageUrl": null,
-            "status": "판매중"
-        }
-    ],
-    "pageable": {
-        "sort": {
-            "empty": false,
-            "sorted": true,
-            "unsorted": false
-        },
-        "offset": 0,
-        "pageNumber": 0,
-        "pageSize": 20,
-        "paged": true,
-        "unpaged": false
-    },
-    "last": true,
-    "totalPages": 1,
-    "totalElements": 3,
-    "size": 20,
-    "number": 0,
-    "sort": {
-        "empty": false,
-        "sorted": true,
-        "unsorted": false
-    },
-    "first": true,
-    "numberOfElements": 3,
-    "empty": false
-}
-```
-- #### 물품 조회 (단일) (GET /items/{itemId})
-Request -> X   
-Response
-```json
-{
-    "title": "중고 맥북 팝니다",
-    "description": "2019년 맥북 프로 13인치 모델입니다",
-    "minPriceWanted": 1000000,
-    "status": "판매중"
-}
-```
-- #### 물품 정보 수정 (PUT /items/{itemId})
-Request
-```json
-{
-    "title": "중고 맥북 안팝니다",
-    "description": "2019년 맥북 프로 13인치 모델입니다",
-    "minPriceWanted": 1000000,
-    "writer": "jeeho.dev",
-    "password": "1qaz2wsx"
-}
-```
-Response
-```json
-{
-    "message": "물품이 수정되었습니다."
-}
-```
-- #### 물품 이미지 등록 (PUT /items/{itemId}/image)
-Request  
-image = notebook.jpg    
-writer = jeeho.dev    
-password = 1qaz2wsx     
-<br>
-Response
-```json
-{
-    "message": "이미지가 등록되었습니다."
-}
-```
-- #### 물품 정보 삭제 (DELETE /items/{itemId})
-Request
-```json
-{
-    "writer": "jeeho.dev",
-    "password": "1qaz2wsx"
-}
-```
-Response
-```json
-{
-    "message": "물품을 삭제했습니다."
-}
-```
-<br>
 
-### 💛 중고 물품 댓글
-- #### 댓글 등록 (POST /items/{itemId}/comments)
-Request
-```json
-{
-    "writer": "jeeho.edu",
-    "password": "qwerty1234",
-    "content": "할인 가능하신가요?"
-}
-```
-Response
-```json
-{
-    "message": "댓글이 등록되었습니다."
-}
-```
-- #### 댓글 조회 (GET /items/{itemId}/comments)
-Request -> X   
-Response
-```json
-{
-    "content": [
-        {
-            "id": 1,
-            "content": "할인 가능하신가요?",
-            "reply": null
-        }
-    ],
-    "pageable": {
-        "sort": {
-            "empty": false,
-            "sorted": true,
-            "unsorted": false
-        },
-        "offset": 0,
-        "pageSize": 25,
-        "pageNumber": 0,
-        "unpaged": false,
-        "paged": true
-    },
-    "last": true,
-    "totalElements": 1,
-    "totalPages": 1,
-    "size": 25,
-    "number": 0,
-    "sort": {
-        "empty": false,
-        "sorted": true,
-        "unsorted": false
-    },
-    "first": true,
-    "numberOfElements": 1,
-    "empty": false
-}
-```
-- #### 댓글 수정 (PUT /items/{itemId}/comments/{commentId})
-Request
-```json
-{
-    "writer": "jeeho.edu",
-    "password": "qwerty1234",
-    "content": "할인 가능하신가요? 1000000 정도면 고려 가능합니다"
-}
-```
-Response
-```json
-{
-    "message": "댓글이 수정되었습니다."
-}
-```
-- #### 댓글 삭제 (DELETE /items/{itemId}/comments/{commentId})
-Request
-```json
-{
-    "writer": "jeeho.edu",
-    "password": "qwerty1234"
-}
-```
-Response
-```json
-{
-    "message": "댓글을 삭제했습니다."
-}
-```
-- #### 답글 작성 (PUT /items/{itemId}/comments/{commentId}/reply)
-Request
-```json
-{
-    "writer": "jeeho.dev",
-    "password": "1qaz2wsx",
-    "reply": "안됩니다"
-}
-```
-Response
-```json
-{
-    "message": "댓글에 답변이 추가되었습니다."
-}
-```
-<br>
-
-### 💚 구매 제안
-- #### 구매 제안 등록 (POST /items/{itemId}/proposals)
-Request
-```json
-{
-    "writer": "jeeho.edu",
-    "password": "qwerty1234",
-    "suggestedPrice": 1000000
-}
-```
-Response
-```json
-{
-    "message": "구매 제안이 등록되었습니다."
-}
-```
-- #### 구매 제안 조회 (제안자) (GET /items/{itemId}/proposals?writer=jeeho.edu&password=qwerty1234&page=0)
-Request -> X  
-Response
-```json
-{
-    "content": [
-        {
-            "id": 1,
-            "suggestedPrice": 1000000,
-            "status": "제안"
-        },
-        {
-            "id": 2,
-            "suggestedPrice": 1100000,
-            "status": "제안"
-        },
-        {
-            "id": 3,
-            "suggestedPrice": 1200000,
-            "status": "제안"
-        }
-    ],
-    "pageable": {
-        "sort": {
-            "empty": false,
-            "sorted": true,
-            "unsorted": false
-        },
-        "offset": 0,
-        "pageSize": 25,
-        "pageNumber": 0,
-        "unpaged": false,
-        "paged": true
-    },
-    "last": true,
-    "totalElements": 3,
-    "totalPages": 1,
-    "size": 25,
-    "number": 0,
-    "sort": {
-        "empty": false,
-        "sorted": true,
-        "unsorted": false
-    },
-    "first": true,
-    "numberOfElements": 3,
-    "empty": false
-}
-```
-- #### 구매 제안 조회 (판매자) (GET /items/{itemId}/proposals?writer=jeeho.dev&password=1qaz2wsx&page=0)
-Request -> X   
-Response
-```json
-{
-    "content": [
-        {
-            "id": 1,
-            "suggestedPrice": 1000000,
-            "status": "제안"
-        },
-        {
-            "id": 2,
-            "suggestedPrice": 1100000,
-            "status": "제안"
-        },
-        {
-            "id": 3,
-            "suggestedPrice": 1200000,
-            "status": "제안"
-        },
-        {
-            "id": 4,
-            "suggestedPrice": 1200000,
-            "status": "제안"
-        }
-    ],
-    "pageable": {
-        "sort": {
-            "empty": false,
-            "sorted": true,
-            "unsorted": false
-        },
-        "offset": 0,
-        "pageSize": 25,
-        "pageNumber": 0,
-        "unpaged": false,
-        "paged": true
-    },
-    "last": true,
-    "totalElements": 4,
-    "totalPages": 1,
-    "size": 25,
-    "number": 0,
-    "sort": {
-        "empty": false,
-        "sorted": true,
-        "unsorted": false
-    },
-    "first": true,
-    "numberOfElements": 4,
-    "empty": false
-}
-```
-- #### 구매 제안 수정 (PUT /items/{itemId}/proposals/{proposalId})
-Request
-```json
-{
-    "writer": "jeeho.edu",
-    "password": "qwerty1234",
-    "suggestedPrice": 1100000
-}
-```
-Response
-```json
-{
-    "message": "제안이 수정되었습니다."
-}
-```
-- #### 구매 제안 삭제 (DELETE /items/{itemId}/proposals/{proposalId})
-Request
-```json
-{
-    "writer": "jeeho.edu",
-    "password": "qwerty1234"
-}
-```
-Response
-```json
-{
-    "message": "제안을 삭제했습니다."
-}
-```
-- #### 구매 제안 수락/거절 (PUT /items/{itemId}/proposals/{proposalId})
-Request
-```json
-{
-    "writer": "jeeho.dev",
-    "password": "1qaz2wsx",
-    "status": "수락"
-}
-```
-또는
-```json
-{
-    "writer": "jeeho.dev",
-    "password": "1qaz2wsx",
-    "status": "거절"
-}
-```
-Response
-```json
-{
-    "message": "제안의 상태가 변경되었습니다."
-}
-```
-- #### 구매 제안 확정 (PUT /items/{itemId}/proposals/{proposalId})
-Request
-```json
-{
-    "writer": "jeeho.edu",
-    "password": "qwerty1234",
-    "status": "확정"
-}
-```
-Response
-```json
-{
-    "message": "구매가 확정되었습니다."
-}
-```
+## 💻 Postman Collection
